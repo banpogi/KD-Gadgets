@@ -1,0 +1,45 @@
+﻿@page
+@model KD_Gadgets.Pages.Admin.Users.IndexModel
+@{
+}
+<h3 class="text-center">List of Users</h3>
+<table class="table">
+	<thead>
+		<tr>
+			<th>ID</th>
+			<th>Name</th>
+			<th>Email</th>
+			<th>Phone</th>
+			<th>Address</th>
+			<th>Role</th>
+			<th>Created At</th>
+		</tr>
+	</thead>
+	<tbody>
+		@foreach (var user in Model.usersList)
+		{
+			<tr>
+				<td>@user.id</td>
+				<td>@user.firstname @user.lastname</td>
+				<td>@user.email</td>
+				<td>@user.phone</td>
+				<td>@user.address</td>
+				@if (user.role.Equals("admin"))
+				{
+					<td>
+						<span class="badge bg-danger">@user.role</span>
+					</td>
+
+				}
+				else
+				{
+					<td>
+						<span class="badge bg-primary">@user.role</span>
+					</td>
+				}
+				<td>@user.createdAt</td>
+			</tr>
+		}
+	</tbody>
+
+</table>

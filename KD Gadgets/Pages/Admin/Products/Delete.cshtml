@@ -1,0 +1,59 @@
+﻿@page
+@inject Microsoft.AspNetCore.Hosting.IWebHostEnvironment webHostEnvironment
+@inject IConfiguration configuration
+@using System.Data.SqlClient;
+
+@{
+
+	string id = Request.Query["id"];
+
+	try
+	{
+		string connectionString = configuration.GetConnectionString("DefaultConnection");
+		using (SqlConnection connection = new SqlConnection(connectionString))
+		{
+			connection.Open();
+			//before we delete the book we need to find the filename of the image of the book
+			string sqlSelect = "SELECT image_filename FROM products where id=@id";
+			using (SqlCommand command = new SqlCommand(sqlSelect, connection))
+			{
+				command.Parameters.AddWithValue("@id", id);
+				using (SqlDataReader reader = command.ExecuteReader())
+				{
+					if (reader.Read())
+					{
+						string imageFileName = reader.GetString(0);
+						string imageFolder = webHostEnvironment.WebRootPath + "/images";
+						string imageFullPath = System.IO.Path.Combine(imageFolder, imageFileName);
+
+						System.IO.File.Delete(imageFullPath);
+						Console.WriteLine("Delete image " + imageFullPath);
+
+					}
+				}
+			}
+
+
+
+			//SQL query to delete the books from the database
+			string sql = "DELETE FROM products where id=@id";
+
+			using (SqlCommand command = new SqlCommand(sql, connection))
+			{
+				command.Parameters.AddWithValue("@id", id);
+
+				command.ExecuteNonQuery();
+
+
+			}
+
+		}
+	}
+	catch (Exception ex)
+	{
+		Console.WriteLine(ex.Message);
+
+	}
+
+	Response.Redirect("/Admin/Products/Index");
+}

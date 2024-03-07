@@ -1,0 +1,70 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home page";
+    ViewData["No_Container"] = true;
+}
+<style>
+    .product-item img {
+        width: 100%;
+        height: 260px;
+        object-fit: contain;
+       
+    }
+</style>
+
+<section style="background-color: #eee;">
+    <div class="text-center container py-5">
+        <div class="col-md-6">
+            <form class="d-flex mb-3" role="search">
+                <input class="form-control me-2" type="search" name="search" value="@Model.search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-secondary" type="submit">Search</button>
+            </form>
+        </div>
+
+        <div class="row">
+            
+
+
+            @foreach(var item in Model.productLists)
+            {
+                <div class="col-lg-4 col-md-12 mb-4">
+                    <div class="card h-100 product-item">
+                        <div class="card-img-top bg-image hover-zoom ripple ripple-surface ripple-surface-light"
+                             data-mdb-ripple-color="light">
+                            <img src="/images/@item.ImageFileName"
+                                 class="w-100" />
+                            <a href="#!">
+
+                                <div class="hover-overlay">
+                                    <div class="mask" style="background-color: rgba(251, 251, 251, 0.15);"></div>
+                                </div>
+                            </a>
+                        </div>
+                        <div class="card-body">
+                           
+                                <h5 class="card-title mb-3">@item.ProductName</h5>                                                
+                                <p>@item.Category</p>                         
+                            <h6 class="mb-3">Price : @(item.Price)$</h6>
+                            <a class="btn btn-outline-primary my-2" href="/ProductDetails?id=@(item.Id)" role="button">Details</a>
+                            <button type="button" class="btn btn-warning" onclick="addToCart(this, @item.Id)">Add to Cart</button>
+                        </div>
+                    </div>
+                </div>
+            }
+            
+
+        </div>
+        <nav>
+            <ul class="pagination">
+
+                @for (int i = 1; i <= Model.totalPages; i++)
+                {
+                    <li class="page-item"><a class="page-link " href="?page=@(i)&search=@(Model.search)">@i</a></li>
+
+                }
+            </ul>
+        </nav>
+    </div>
+   
+</section>

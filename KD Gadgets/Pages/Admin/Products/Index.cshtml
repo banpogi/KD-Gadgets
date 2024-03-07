@@ -1,0 +1,63 @@
+﻿@page
+@model KD_Gadgets.Pages.Admin.Products.IndexModel
+@{
+}
+
+
+<div class="row my-3">
+    <div class="col">
+        <a href="/Admin/Products/Create" class="btn btn-info">
+            Add New Product
+        </a>
+    </div>
+    <div class="col-md-6">
+        <form class="d-flex" role="search">
+            <input class="form-control me-2" type="search" name="search" value="@Model.search" placeholder="Search" aria-label="Search">
+            <button class="btn btn-outline-secondary" type="submit">Search</button>
+        </form>
+    </div>
+</div>
+
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th scope="col">Id</th>
+            <th scope="col">Product Name</th>
+            <th scope="col">Price</th>
+            <th scope="col">Category</th>
+            <th scope="col">Image</th>
+            <th scope="col">Action</th>
+        </tr>
+    </thead>
+    <tbody>
+
+        @foreach(var item in Model.productLists)
+        {
+            <tr>
+                <td>@item.Id</td>
+                <td>@item.ProductName</td>
+                <td>@item.Price</td>
+                <td>@item.Category</td>
+                <td><img src="/images/@item.ImageFileName" width="120" height="120"></td>
+                <td>
+                    <a href="/Admin/Products/Edit?id=@item.Id" style="text-decoration : none">Edit</a>
+                    <a class="text-danger" href="/Admin/Products/Delete?id=@item.Id" style="text-decoration : none">Delete</a>
+                </td>
+            </tr>
+        }
+
+
+           
+    </tbody>
+</table>
+
+<nav>
+    <ul class="pagination">
+
+        @for (int i = 1; i <= Model.totalPages; i++)
+        {
+            <li class="page-item"><a class="page-link" href="?page=@(i)&search=@(Model.search)">@i</a></li>
+
+        }
+    </ul>
+</nav>
